@@ -1,4 +1,3 @@
-import React from 'react';
 
 interface InputSharedProps extends React.InputHTMLAttributes<HTMLInputElement> {
   iconInput?: React.ReactNode;
