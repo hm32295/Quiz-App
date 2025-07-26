@@ -3,20 +3,26 @@ import InputSHared from '@/app/shared/InputSHared'
 
 import {  useForm } from 'react-hook-form'
 import Link from 'next/link'
-import axios from 'axios'
 import { RiLockPasswordLine } from 'react-icons/ri'
 import { FiMail } from 'react-icons/fi'
-
-const page = () => {
-  const {register, reset,handleSubmit ,formState:{errors}} = useForm()
+import { axiosInstance } from '@/services/api'
+import { AUTH_URL } from '@/services/endpoints'
+import { EMAIL_VALIDATION } from '@/services/validation'
+interface FormData {
+  otp: string;
+  password: string;
+  email: string;
+}
+const Page = () => {
+  const {register, reset,handleSubmit ,formState:{errors}} = useForm<FormData>()
 
   
-  const restPassword =async (data)=>{
-    console.log(data)
+  const restPassword =async (data:FormData)=>{
+   
     try {
-      const response = await axios.post('https://upskilling-egypt.com:3005/api/auth/reset-password' ,data)
+      const response = await axiosInstance.post(AUTH_URL.RESET_PASSWORD ,data)
       console.log(response);
-      
+      reset()
     } catch (error) {
       console.log(error);
       
@@ -26,12 +32,9 @@ const page = () => {
     <form onSubmit={handleSubmit(restPassword)} className='flex-wrap max-w-md flex justify-center items-center mx-auto mt-10'>
       <h2 className='w-full mb-5 text-black capitalize ml-2'>rest Password</h2>
 
-
-
       <InputSHared 
         register={register} 
         name='otp' 
-      
         validation={{ required: 'the otp is required' }} 
         iconInput={<FiMail color='#fff'/>} 
         label='OTP' 
@@ -45,7 +48,7 @@ const page = () => {
         register={register} 
         name='email' 
       
-        validation={{ required: 'the email is required' }} 
+        validation={EMAIL_VALIDATION} 
         iconInput={<FiMail color='#fff'/>} 
         label='Your email address' 
         placeholder="Type your email" />
@@ -53,14 +56,6 @@ const page = () => {
       {errors&& <p  className='w-full text-red-500 ml-2 capitalize mb-3.5'>{errors.email?.message}</p>}
      
      
-
-
-
-
-
-
-
-
       <InputSHared 
         register={register} 
         name='password' 
@@ -91,4 +86,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page

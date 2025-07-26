@@ -1,22 +1,25 @@
 'use client'
 import InputSHared from '@/app/shared/InputSHared'
-
 import {  useForm } from 'react-hook-form'
-// import { RiLockPasswordLine } from 'react-icons'
-import Link from 'next/link'
-import axios from 'axios'
 import { RiLockPasswordLine } from 'react-icons/ri'
+import { axiosInstance } from '@/services/api'
+import { AUTH_URL } from '@/services/endpoints'
+interface FormData{
+  email?: string
+  password: string
+  password_new: string
 
-const page = () => {
-  const {register, reset,handleSubmit ,formState:{errors}} = useForm()
+}
+const Page = () => {
+  const {register, reset,handleSubmit ,formState:{errors}} = useForm<FormData>()
 
   
-  const changePassword =async (data)=>{
+  const changePassword =async (data:FormData)=>{
     console.log(data)
     try {
-      const response = await axios.post('http://upskilling-egypt.com:3005/api/auth/change-password' ,data)
+      const response = await axiosInstance.post(AUTH_URL.CHANGE_PASSWORD ,data)
       console.log(response);
-      
+      reset()
     } catch (error) {
       console.log(error);
       
@@ -65,4 +68,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page

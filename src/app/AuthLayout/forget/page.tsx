@@ -1,36 +1,37 @@
 'use client'
 import InputSHared from '@/app/shared/InputSHared'
-import icon from '@/app/images/message.png'
-import Image from 'next/image'
 import {  useForm } from 'react-hook-form'
 import { FiMail } from 'react-icons/fi'
 import Link from 'next/link'
-import axios from 'axios'
-/// http://upskilling-egypt.com:3005/api/auth/forgot-password
-const page = () => {
-  const {register, reset,handleSubmit ,formState:{errors}} = useForm()
+import { axiosInstance } from '@/services/api'
+import { AUTH_URL } from '@/services/endpoints'
+import { EMAIL_VALIDATION } from '@/services/validation'
+interface FormData{
+  email: string
+}
+const Page = () => {
+  const {register, reset,handleSubmit ,formState:{errors}} = useForm<FormData>()
 
   
-  const forgetPassword =async (data)=>{
+  const forgetPassword =async (data:FormData)=>{
     console.log(data)
     try {
-      const response = await axios.post(' http://upskilling-egypt.com:3005/api/auth/forgot-password' ,data)
+      const response = await axiosInstance.post(AUTH_URL.FORGOT_PASSWORD ,data)
       console.log(response);
-      
+      reset()
     } catch (error) {
       console.log(error);
       
     }
-  }
+  } 
   return (
     <form onSubmit={handleSubmit(forgetPassword)} className='flex-wrap max-w-md flex justify-center items-center mx-auto mt-10'>
       <h2 className='w-full mb-5 text-black'>Forget Password</h2>
 
       <InputSHared 
         register={register} 
-        name='email' 
-       
-        validation={{ required: 'the email is required' }} 
+        name='email'
+        validation={EMAIL_VALIDATION} 
         iconInput={<FiMail color='#fff'/>} 
         label='Email address' 
         placeholder="Type your email" />
@@ -54,4 +55,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page

@@ -1,23 +1,24 @@
+import { Path, UseFormRegister } from "react-hook-form";
 
-interface InputSharedProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  iconInput?: React.ReactNode;
-  label?: string;
-  name: string;
-  register?: (name: string, options?: any) => any;
+type InputProps<T> = {
+  name: Path<T>;
+  register: UseFormRegister<T>;
   validation?: any;
   type?: string;
-}
+  label?: string;
+  placeholder?: string;
+  iconInput?: React.ReactNode;
+};
 
-const InputShared: React.FC<InputSharedProps> = ({
-  iconInput,
-  label,
-  placeholder,
-  type = 'text',
+function InputShared<T extends Record<string, any>>({
   name,
   register,
   validation,
-  ...rest
-}) => {
+  type = "text",
+  label,
+  placeholder,
+  iconInput,
+}: InputProps<T>){
   return (
     <div className='w-full p-2'>
       {label && (
@@ -33,14 +34,12 @@ const InputShared: React.FC<InputSharedProps> = ({
         )}
         <input
           id={name}
-          name={name}
           type={type}
           placeholder={placeholder}
           className={`bg-gray-50 border text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ${
             iconInput ? 'pl-10' : 'pl-3'
           } p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
           {...(register ? register(name, validation) : {})}
-          {...rest}
         />
       </div>
      
