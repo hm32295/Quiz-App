@@ -7,7 +7,7 @@ import {
 import UserDropdown from "./userDropdown";
 import { FiMenu } from "react-icons/fi";
 
-export default function Navbar({ open,setOpen }:{open:boolean ,setOpen: any}) {
+export default function Navbar({ open,setOpen ,menuItems}:{menuItems:any,open:boolean ,setOpen: any}) {
   const toggleSidebar = () => {
     setOpen(!open);
   };
@@ -21,7 +21,9 @@ export default function Navbar({ open,setOpen }:{open:boolean ,setOpen: any}) {
           </button>
 
         :null}  
-        <span className="text-sm md:text-base font-medium">Groups</span>
+        <span className="text-sm md:text-base font-medium">
+          {menuItems.map(item=>item.active && <span key={item.name}>{item.name}</span>)}
+          </span>
       </div>
 
       {/* Center button */}

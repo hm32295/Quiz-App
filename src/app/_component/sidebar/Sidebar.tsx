@@ -1,23 +1,9 @@
 'use client'
-import {
-  FaHome,
-  FaUsers,
-  FaQuestionCircle,
-  FaChartBar,
-  FaChalkboardTeacher,
-} from 'react-icons/fa'
-import { MdGroups } from 'react-icons/md'
 
-const menuItems = [
-  { name: 'Dashboard', icon: <FaHome /> },
-  { name: 'Students', icon: <FaUsers />, active: true  },
-  { name: 'Groups', icon: <MdGroups />},
-  { name: 'Quizzes', icon: <FaChalkboardTeacher /> },
-  { name: 'Results', icon: <FaChartBar /> },
-  { name: 'Help', icon: <FaQuestionCircle /> },
-]
 
-export default function Sidebar({ open, setOpen }: { open: boolean; setOpen: any }) {
+
+
+export default function Sidebar({ open, setOpen,menuItems }: {menuItems:any, open: boolean; setOpen: any }) {
   return (
     <>
       {/* Overlay for small screens */}
@@ -36,13 +22,13 @@ export default function Sidebar({ open, setOpen }: { open: boolean; setOpen: any
           md:translate-x-0 md:static md:block
         `}
       >
-        <SidebarContent />
+        <SidebarContent menuItems={menuItems}/>
       </aside>
     </>
   )
 }
 
-function SidebarContent() {
+function SidebarContent({menuItems}:any) {
   return (
     <div className="w-64 bg-white h-screen px-0 pt-4 ">
       {menuItems.map((item, index) => (
