@@ -1,5 +1,6 @@
 "use client";
 
+import avatar from "@/app/images/avatar.png";
 import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import { FaChevronDown } from "react-icons/fa";
@@ -30,7 +31,7 @@ export default function UserDropdown() {
         onClick={() => setOpen(!open)}
         className="flex items-center gap-2 cursor-pointer px-2 py-1 hover:bg-gray-100 rounded-md"
       >
-        <img src="/avatar.png" alt="User Avatar"   className="w-8 h-8 rounded-full" />
+        <Image src={avatar} alt="User Avatar"   className="w-8 h-8 rounded-full" />
         <span className="hidden sm:block text-sm font-medium">Hamza</span>
         <FaChevronDown size={12} />
       </div>
