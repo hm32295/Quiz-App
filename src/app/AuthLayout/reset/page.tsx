@@ -1,89 +1,104 @@
-'use client'
-import InputSHared from '@/app/shared/InputSHared'
+'use client';
 
-import {  useForm } from 'react-hook-form'
-import Link from 'next/link'
-import { RiLockPasswordLine } from 'react-icons/ri'
-import { FiMail } from 'react-icons/fi'
-import { axiosInstance } from '@/services/api'
-import { AUTH_URL } from '@/services/endpoints'
-import { EMAIL_VALIDATION } from '@/services/validation'
-interface FormData {
+import React, { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { FaEnvelope, FaLock, FaCheckCircle } from 'react-icons/fa';
+import InputShared from '@/app/shared/InputSHared';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { resetPasswordThunk } from '@/store/features/auth/authThunk';
+import { toast } from 'react-toastify';
+import { clearAuthMessages } from '@/store/features/auth/authSlice';
+
+type ResetPasswordInputs = {
   otp: string;
-  password: string;
   email: string;
-}
-const Page = () => {
-  const {register, reset,handleSubmit ,formState:{errors}} = useForm<FormData>()
+  password: string;
+};
 
-  
-  const restPassword =async (data:FormData)=>{
-   
-    try {
-      const response = await axiosInstance.post(AUTH_URL.RESET_PASSWORD ,data)
-      console.log(response);
-      reset()
-    } catch (error) {
-      console.log(error);
-      
+export default function ResetPasswordPage() {
+  const dispatch = useAppDispatch();
+  const { loading, error, successMsg } = useAppSelector((state) => state.auth);
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<ResetPasswordInputs>();
+
+  const onSubmit = (data: ResetPasswordInputs) => {
+    dispatch(resetPasswordThunk(data));
+  };
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+      dispatch(clearAuthMessages());
     }
-  }
+
+    if (successMsg) {
+      toast.success(successMsg);
+      reset();
+      dispatch(clearAuthMessages());
+    }
+  }, [error, successMsg, dispatch, reset]);
+
   return (
-    <form onSubmit={handleSubmit(restPassword)} className='flex-wrap max-w-md flex justify-center items-center mx-auto mt-10'>
-      <h2 className='w-full mb-5 text-black capitalize ml-2'>rest Password</h2>
+    <div className="w-full text-white">
+      <h2 className="text-xl font-semibold text-lime-300">
+        Reset your password on <span className="text-white">QuizWiz</span>
+      </h2>
 
-      <InputSHared 
-        register={register} 
-        name='otp' 
-        validation={{ required: 'the otp is required' }} 
-        iconInput={<FiMail color='#fff'/>} 
-        label='OTP' 
-        placeholder="Choose your otp" />
+      <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-4">
+        <InputShared
+          name="otp"
+          register={register}
+          label="OTP code"
+          placeholder="Enter the OTP"
+          type="text"
+          iconInput={<FaEnvelope className="text-gray-500" />}
+          validation={{ required: 'OTP is required' }}
+        />
+        {errors.otp && (
+          <p className="text-red-400 text-sm ml-1">{errors.otp.message}</p>
+        )}
 
-      {errors&& <p  className='w-full text-red-500 ml-2 capitalize mb-3.5'>{errors.otp?.message}</p>}
-     
-     
+        <InputShared
+          name="email"
+          register={register}
+          label="Registered email address"
+          placeholder="Type your email"
+          type="email"
+          iconInput={<FaEnvelope className="text-gray-500" />}
+          validation={{ required: 'Email is required' }}
+        />
+        {errors.email && (
+          <p className="text-red-400 text-sm ml-1">{errors.email.message}</p>
+        )}
 
-      <InputSHared 
-        register={register} 
-        name='email' 
-      
-        validation={EMAIL_VALIDATION} 
-        iconInput={<FiMail color='#fff'/>} 
-        label='Your email address' 
-        placeholder="Type your email" />
+        <InputShared
+          name="password"
+          register={register}
+          label="New password"
+          placeholder="Type your new password"
+          type="password"
+          iconInput={<FaLock className="text-gray-500" />}
+          validation={{ required: 'Password is required' }}
+        />
+        {errors.password && (
+          <p className="text-red-400 text-sm ml-1">{errors.password.message}</p>
+        )}
 
-      {errors&& <p  className='w-full text-red-500 ml-2 capitalize mb-3.5'>{errors.email?.message}</p>}
-     
-     
-      <InputSHared 
-        register={register} 
-        name='password' 
-        type='password'
-        validation={{ required: 'the password is required' }} 
-        iconInput={<RiLockPasswordLine color='#fff'/>} 
-        label='password address' 
-        placeholder="Type your password" />
-
-      {errors&& <p  className='w-full text-red-500 ml-2 capitalize mb-3.5'>{errors.password?.message}</p>}
-     
-     
-      <div className='flex items-center justify-between w-full'>
-        <button
-        type="submit"
-        className="w-auto bg-[#F5F5F5] ml2 hover:bg-[#f9f9f9] cursor-pointer text-black py-2 px-4 rounded-md font-medium"
-      >
-        Send
-      </button>
-
-      <Link className='text-gray-900  flex justify-end capitalize cursor-pointer' href={'/AuthLayout/login'}> login ?</Link>
-
-
-      </div>
-
-
-    </form>
-  )
+        <div className="flex items-center justify-between mt-4 ">
+          <button
+            type="submit"
+            title="Reset Password"
+            className="flex items-center gap-2 bg-white text-black px-4 py-2 rounded-md font-semibold cursor-pointer"
+            disabled={loading}
+          >
+            {loading ? 'Loading...' : 'Reset Password'} <FaCheckCircle />
+          </button>
+        </div>
+      </form>
+    </div>
+  );
 }
-
-export default Page
