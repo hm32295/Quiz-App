@@ -1,58 +1,99 @@
-'use client'
-import InputSHared from '@/app/shared/InputSHared'
-import {  useForm } from 'react-hook-form'
-import { FiMail } from 'react-icons/fi'
-import Link from 'next/link'
-import { axiosInstance } from '@/services/api'
-import { AUTH_URL } from '@/services/endpoints'
-import { EMAIL_VALIDATION } from '@/services/validation'
-interface FormData{
-  email: string
-}
-const Page = () => {
-  const {register, reset,handleSubmit ,formState:{errors}} = useForm<FormData>()
+'use client';
 
-  
-  const forgetPassword =async (data:FormData)=>{
-    console.log(data)
-    try {
-      const response = await axiosInstance.post(AUTH_URL.FORGOT_PASSWORD ,data)
-      console.log(response);
-      reset()
-    } catch (error) {
-      console.log(error);
-      
+import InputShared from '@/app/shared/InputSHared';
+import { useForm } from 'react-hook-form';
+import Link from 'next/link';
+import { FiMail } from 'react-icons/fi';
+import { EMAIL_VALIDATION } from '@/services/validation';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { forgetPasswordThunk } from '@/store/features/auth/authThunk';
+import { clearAuthMessages } from '@/store/features/auth/authSlice';
+import { useEffect } from 'react';
+import { toast } from 'react-toastify';
+import { useRouter } from 'next/navigation';
+
+interface FormData {
+  email: string;
+}
+
+const ForgetPasswordPage = () => {
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+  const {
+    register,
+    reset,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>();
+
+  const { error, successMsg, loading } = useAppSelector((state) => state.auth);
+
+  const onSubmit = (data: FormData) => {
+    dispatch(forgetPasswordThunk(data));
+    reset();
+  };
+
+  useEffect(() => {
+    if (error) toast.error(error);
+
+    if (successMsg) {
+      toast.success(successMsg);
+      router.push('/AuthLayout/reset');
     }
-  } 
+
+    return () => {
+      dispatch(clearAuthMessages());
+    };
+  }, [error, successMsg, dispatch, router]);
+
   return (
-    <form onSubmit={handleSubmit(forgetPassword)} className='flex-wrap max-w-md flex justify-center items-center mx-auto mt-10'>
-      <h2 className='w-full mb-5 text-black'>Forget Password</h2>
+    <div className="w-full text-white">
+      <h2 className="text-xl font-semibold text-lime-300 mb-2">
+        Forgot your password?
+      </h2>
+      <p className="text-sm text-gray-300 mb-4">
+        Enter your email address to receive the reset link.
+      </p>
 
-      <InputSHared 
-        register={register} 
-        name='email'
-        validation={EMAIL_VALIDATION} 
-        iconInput={<FiMail color='#fff'/>} 
-        label='Email address' 
-        placeholder="Type your email" />
-
-      {errors&& <p  className='w-full text-red-500 ml-2 capitalize mb-3.5'>{errors.email?.message}</p>}
-      <div className='flex items-center justify-between w-full'>
-        <button
-        type="submit"
-        className="w-auto bg-[#F5F5F5] ml2 hover:bg-[#f9f9f9] cursor-pointer text-black py-2 px-4 rounded-md font-medium"
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="max-w-md w-full space-y-4"
       >
-        Send
-      </button>
+        {/* Email */}
+        <InputShared
+          register={register}
+          name="email"
+          validation={EMAIL_VALIDATION}
+          iconInput={<FiMail className="text-gray-500" />}
+          label="Email address"
+          placeholder="Type your email"
+        />
+        {errors.email && (
+          <p className="text-red-500 ml-2 text-sm capitalize">
+            {errors.email.message}
+          </p>
+        )}
 
-      <Link className='text-gray-900  flex justify-end capitalize cursor-pointer' href={'/AuthLayout/login'}> login ?</Link>
+        {/* Submit + Login link */}
+        <div className="flex items-center justify-between pt-2">
+          <button
+            type="submit"
+            disabled={loading}
+            className="bg-white text-black px-4 py-2 rounded-md font-semibold hover:bg-gray-100 cursor-pointer"
+          >
+            {loading ? 'Sending...' : 'Send'}
+          </button>
 
+          <Link
+            href="/AuthLayout/login"
+            className="text-sm text-lime-300 hover:underline"
+          >
+            Back to login
+          </Link>
+        </div>
+      </form>
+    </div>
+  );
+};
 
-      </div>
-
-
-    </form>
-  )
-}
-
-export default Page
+export default ForgetPasswordPage;
