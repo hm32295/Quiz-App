@@ -1,5 +1,3 @@
-
-
 //  Auth APIs
 export const AUTH_URL = {
   REGISTER: '/api/auth/register',
@@ -25,8 +23,7 @@ export const STUDENT_URL = {
     `/api/student/${studentId}/${groupId}`,
   TOP_FIVE: '/api/student/top-five',
 };
-
-//  Instructor APIs
+// Instructor APIs
 export const INSTRUCTOR_URL = {
   UPDATE_MY_ACCOUNT: '/api/instructor',
 };
