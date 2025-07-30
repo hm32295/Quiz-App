@@ -1,9 +1,23 @@
 'use client'
 
+import { MenuItem } from "@/app/learner/layout";
+import { useRouter } from "next/navigation";
+interface SidebarProps {
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  menuItems: MenuItem[];
+  setMenu: (menu: MenuItem[]) => void;
+}
+interface SidebarContentProps  {
+  router: ReturnType<typeof useRouter>;
+  setMenu: (menu: MenuItem[]) => void;
+  menuItems: MenuItem[];
+
+};
 
 
-
-export default function Sidebar({ open, setOpen,menuItems }: {menuItems:any, open: boolean; setOpen: any }) {
+export default function Sidebar({ setMenu,open, setOpen,menuItems }: SidebarProps) {
+ const router = useRouter()
   return (
     <>
       {/* Overlay for small screens */}
@@ -22,17 +36,27 @@ export default function Sidebar({ open, setOpen,menuItems }: {menuItems:any, ope
           md:translate-x-0 md:static md:block
         `}
       >
-        <SidebarContent menuItems={menuItems}/>
+        <SidebarContent router={router} setMenu={setMenu} menuItems={menuItems}/>
       </aside>
     </>
   )
 }
 
-function SidebarContent({menuItems}:any) {
+function SidebarContent({router,setMenu,menuItems}:SidebarContentProps) {
+ 
+  const taps =(item:MenuItem)=>{
+    const newMenu = menuItems.map(ele=>{
+      return {name : ele.name ,icon:ele.icon,active: item.name=== ele.name,path:ele.path}
+    })
+    setMenu(newMenu);
+    
+    
+  }
   return (
     <div className="w-64 bg-white h-screen px-0 pt-4 ">
       {menuItems.map((item, index) => (
         <div
+        onClick={()=>{taps(item);router.push(item.path)}}
           key={index}
           className={`flex items-center gap-3 px-7 py-4 not-first:border-t-stone-800 not-first:border-t cursor-pointer 
             ${item.active ? 'bg-[#0A0F2F] text-white' : 'hover:bg-gray-100'}
