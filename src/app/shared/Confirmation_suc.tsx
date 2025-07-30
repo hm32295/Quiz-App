@@ -93,4 +93,4 @@ export default function HeadlessDemo({HeadetTitlw ,SecondMessage,funSAVE,CODESH_
     )
     
 }
-//  <Confirmation_suc HeadetTitlw='Quiz joined successfully ' SecondMessage='Python for noobs Quiz one' funSAVE={funSAVE}CODESH_OW={CODESH_OW}/>
+//  <Confirmation_suc HeadetTitlw='Quiz joined successfully ' SecondMessage='Python for noobs Quiz one' funSAVE={funSAVE} CODESH_OW={CODESH_OW}/>
