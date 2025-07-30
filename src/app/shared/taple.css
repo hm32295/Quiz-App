@@ -1,0 +1,88 @@
+
+
+.Mopilee {
+  display: block;
+}
+
+@media (min-width: 991px) {
+  .Mopilee {
+    display: none;
+  }
+}
+.Desktop{
+    display: none;
+}
+@media (min-width: 991px) {
+  .Desktop {
+    display: block;
+  }
+}
+/* 
+'use client';
+
+import React from 'react';
+import Taple_SHared from '../../shared/Taple_SHared';
+
+
+
+const Login = () => {
+  const dummyRows = [
+    {
+      id: 1,
+      name: "Product 1",
+      image: "https://via.placeholder.com/150",
+      price: "$10",
+      description: "This is the first product",
+      category: [{ name: "Category A" }]
+    },
+    {
+      id: 2,
+      name: "Product 2", 
+      image: "https://via.placeholder.com/150",
+      price: "$20",
+      description: "This is the second product",
+      category: [{ name: "Category B" }]
+    }
+  ];
+
+  const dummyCols = [
+    { label: "Name" },
+    { label: "Image" },
+    { label: "Price" },
+    { label: "Description" },
+    { label: "Category" },
+    { label: "Actions"}
+  ];
+
+  const handleView = (item: any) => {
+    console.log("View:", item);
+  };
+
+  const handleEdit = (item: any) => {
+    console.log("Edit:", item);
+  };
+
+  const handleFavorite = (item: any) => {
+    console.log("Favorite:", item);
+  };
+
+  return (
+    <div >
+      <div >
+        <div >
+          <Taple_SHared
+            cols={dummyCols}
+            rows={dummyRows}
+            fun1={handleView}
+            fun2={handleEdit}
+            fun3={handleFavorite}
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Login;
+
+*/

@@ -10,6 +10,7 @@ export const metadata: Metadata = {
   description: 'Online Quiz App',
 };
 
+
 export default function RootLayout({
   children,
 }: {
