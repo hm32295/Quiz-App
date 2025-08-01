@@ -4,7 +4,13 @@ import { GROUP_URL } from './endpoints';
 export const GroupService = {
   // Get all groups
   // No body required
-  getAll: () => axiosInstance.get(GROUP_URL.GET_ALL),
+  
+  getAll: (token: string) => axiosInstance.get(GROUP_URL.GET_ALL, {
+  headers: {
+    Authorization: `Bearer ${token}`,
+  },
+}),
+
 
   // Get group by ID
   getById: (id: string) => axiosInstance.get(GROUP_URL.GET_BY_ID(id)),

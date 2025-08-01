@@ -9,8 +9,6 @@ export const metadata: Metadata = {
   title: 'QuizWiz',
   description: 'Online Quiz App',
 };
-
-
 export default function RootLayout({
   children,
 }: {

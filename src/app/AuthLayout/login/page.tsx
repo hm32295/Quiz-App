@@ -10,13 +10,17 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { loginThunk } from '@/store/features/auth/authThunk';
 import { toast } from 'react-toastify';
 import { clearAuthMessages } from '@/store/features/auth/authSlice';
+import { useRouter } from 'next/navigation';
+
 
 type LoginFormInputs = {
   email: string;
   password: string;
+
 };
 
 export default function LoginPage() {
+  let navigate=useRouter()
   const dispatch = useAppDispatch();
   const { loading, error, successMsg } = useAppSelector((state) => state.auth);
   const { register, handleSubmit, reset } = useForm<LoginFormInputs>();
@@ -34,6 +38,9 @@ export default function LoginPage() {
 
     if (successMsg) {
       toast.success(successMsg);
+     
+     navigate.push('/instructor/dashboard');
+      
       reset();
       dispatch(clearAuthMessages());
     }

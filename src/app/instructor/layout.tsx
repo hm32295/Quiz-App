@@ -41,10 +41,10 @@ export default function RootLayout({
         <Navbar open={open} setOpen={setOpen} menuItems={menu}/>
         <div className="flex gap-2">
        
-        {/* Sidebar (always visible on md+, controlled by open on mobile) */}
+     
           <Sidebar setMenu={setMenu} open={open} setOpen={setOpen} menuItems={menu} />
-          {/* Main Content */}
-           <main className="p-4">{children}</main>
+        
+           <main className="p-4 w-full">{children}</main>
         </div>
 
 

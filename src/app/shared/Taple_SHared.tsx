@@ -1,38 +1,32 @@
 'use client'
-import React, { useState } from 'react';
-import { View, Edit, Delete, MoreHorizontal, Heart, X } from 'lucide-react';
+import React, { useState } from 'react'
+import { View, Edit, Delete, MoreHorizontal } from 'lucide-react'
 import './taple.css'
+
 interface TableSharedProps {
-  rows: any[];
-  cols?: any[];
-  fun1: (item: unknown ) => void;
-  fun2: (item: unknown ) => void;
-  fun3: (item: unknown ) => void;
+  rows: any[]
+  T_Head: string[]
+  funView?: (item: unknown) => void
+  funEdit?: (item: unknown) => void
+  funDelete?: (item: unknown) => void
 }
 
-const TableShared: React.FC<TableSharedProps> = ({ rows = [], cols = [], fun1, fun2, fun3 }) => {
-  const [openDropdown, setOpenDropdown] = useState<number | null>(null);
+const TableShared: React.FC<TableSharedProps> = ({ rows = [], T_Head, funView, funEdit, funDelete }) => {
+  const [openDropdown, setOpenDropdown] = useState<number | null>(null)
 
   const toggleDropdown = (index: number) => {
-    setOpenDropdown(openDropdown === index ? null : index);
-  };
+    setOpenDropdown(openDropdown === index ? null : index)
+  }
 
   const closeDropdown = () => {
-    setOpenDropdown(null);
-  };
+    setOpenDropdown(null)
+  }
 
-
+  const truncateColumns = ['max_students', '_id', 'instructor', 'students']
 
   return (
-    
-    <div style={{
-      width: '100%',
-      maxWidth: '1280px',
-      overflow: 'hidden !important',
-      margin: '0 auto',
-    
-    }}>
-      {/* Desktop Table View */}
+    <div style={{ width: '100%', overflow: 'hidden', margin: '0 auto' }}>
+      {/* Desktop  */}
       <div className="hidden lg:block Desktop">
         <div style={{
           backgroundColor: '#ffffff',
@@ -47,56 +41,18 @@ const TableShared: React.FC<TableSharedProps> = ({ rows = [], cols = [], fun1, f
               borderBottom: '1px solid #e5e7eb'
             }}>
               <tr>
-                <th style={{
-                  padding: '16px 24px',
-                  textAlign: 'left',
-                  fontSize: '14px',
-                  fontWeight: '600',
-                  color: '#374151',
-                  letterSpacing: '0.025em'
-                }}>
-                  Name
-                </th>
-                <th style={{
-                  padding: '16px 24px',
-                  textAlign: 'left',
-                  fontSize: '14px',
-                  fontWeight: '600',
-                  color: '#374151',
-                  letterSpacing: '0.025em'
-                }}>
-                  Image
-                </th>
-                <th style={{
-                  padding: '16px 24px',
-                  textAlign: 'left',
-                  fontSize: '14px',
-                  fontWeight: '600',
-                  color: '#374151',
-                  letterSpacing: '0.025em'
-                }}>
-                  Price
-                </th>
-                <th style={{
-                  padding: '16px 24px',
-                  textAlign: 'left',
-                  fontSize: '14px',
-                  fontWeight: '600',
-                  color: '#374151',
-                  letterSpacing: '0.025em'
-                }}>
-                  Description
-                </th>
-                <th style={{
-                  padding: '16px 24px',
-                  textAlign: 'left',
-                  fontSize: '14px',
-                  fontWeight: '600',
-                  color: '#374151',
-                  letterSpacing: '0.025em'
-                }}>
-                  Category
-                </th>
+                {T_Head.map((header, index) => (
+                  <th key={index} style={{
+                    padding: '16px 24px',
+                    textAlign: 'left',
+                    fontSize: '14px',
+                    fontWeight: '600',
+                    color: '#374151',
+                    letterSpacing: '0.025em'
+                  }}>
+                    {header}
+                  </th>
+                ))}
                 <th style={{
                   padding: '16px 24px',
                   textAlign: 'right',
@@ -120,96 +76,28 @@ const TableShared: React.FC<TableSharedProps> = ({ rows = [], cols = [], fun1, f
                     borderBottom: '1px solid #e5e7eb',
                     transition: 'background-color 0.15s ease-in-out'
                   }}
-                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f9fafb'}
-                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#ffffff'}
+                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#f9fafb')}
+                  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#ffffff')}
                 >
-                  <td style={{
-                    padding: '16px 24px',
-                    whiteSpace: 'nowrap'
-                  }}>
-                    <div style={{
-                      fontSize: '14px',
-                      fontWeight: '500',
-                      color: '#111827'
-                    }}>
-                      {item.name || '—'}
-                    </div>
-                  </td>
-                  <td style={{
-                    padding: '16px 24px',
-                    whiteSpace: 'nowrap'
-                  }}>
-                    <div style={{
-                      flexShrink: 0,
-                      height: '48px',
-                      width: '48px'
-                    }}>
-                      {item.image ? (
-                        <img 
-                          style={{
-                            height: '48px',
-                            width: '48px',
-                            borderRadius: '8px',
-                            objectFit: 'cover',
-                            border: '1px solid #e5e7eb'
-                          }}
-                          src={item.image} 
-                          alt={item.name || 'Product'} 
-                        />
-                      ) : (
-                        <div style={{
-                          height: '48px',
-                          width: '48px',
-                          borderRadius: '8px',
-                          backgroundColor: '#f3f4f6',
-                          border: '1px solid #e5e7eb',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center'
-                        }}>
-                          <span style={{
-                            fontSize: '12px',
-                            color: '#6b7280'
-                          }}>No Image</span>
-                        </div>
-                      )}
-                    </div>
-                  </td>
-                  <td style={{
-                    padding: '16px 24px',
-                    whiteSpace: 'nowrap'
-                  }}>
-                    <div style={{
-                      fontSize: '14px',
-                      color: '#111827',
-                      fontWeight: '500'
-                    }}>
-                      {item.price || '—'}
-                    </div>
-                  </td>
-                  <td style={{ padding: '16px 24px' }}>
-                    <div style={{
-                      fontSize: '14px',
-                      color: '#4b5563',
-                      maxWidth: '288px',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
+                  {T_Head.map((column, colIndex) => (
+                    <td key={colIndex} style={{
+                      padding: '16px 24px',
                       whiteSpace: 'nowrap'
                     }}>
-                      {item.description || '—'}
-                    </div>
-                  </td>
-                  <td style={{
-                    padding: '16px 24px',
-                    whiteSpace: 'nowrap'
-                  }}>
-                    <div style={{
-                      fontSize: '14px',
-                      color: '#4b5563'
-                    }}>
-                      {item.category?.[0]?.name || item.category?.name || '—'}
-                    </div>
-                  </td>
+                      <div style={{
+                        fontSize: '14px',
+                        fontWeight: '500',
+                        color: '#111827',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap'
+                      }}>
+                        {truncateColumns.includes(column) 
+                          ? String(item[column] || '').substring(0, 3) 
+                          : item[column] || '—'}
+                      </div>
+                    </td>
+                  ))}
                   <td style={{
                     padding: '16px 24px',
                     whiteSpace: 'nowrap',
@@ -231,14 +119,13 @@ const TableShared: React.FC<TableSharedProps> = ({ rows = [], cols = [], fun1, f
                         cursor: 'pointer',
                         outline: 'none'
                       }}
-                      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f9fafb'}
-                      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#ffffff'}
-                      onFocus={(e) => e.currentTarget.style.boxShadow = '0 0 0 2px #3b82f6'}
-                      onBlur={(e) => e.currentTarget.style.boxShadow = 'none'}
+                      onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#f9fafb')}
+                      onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#ffffff')}
+                      onFocus={(e) => (e.currentTarget.style.boxShadow = '0 0 0 2px #3b82f6')}
+                      onBlur={(e) => (e.currentTarget.style.boxShadow = 'none')}
                     >
                       <MoreHorizontal style={{ width: '16px', height: '16px', color: '#6b7280' }} />
                     </button>
-                    
                     {openDropdown === index && (
                       <>
                         <div 
@@ -265,82 +152,87 @@ const TableShared: React.FC<TableSharedProps> = ({ rows = [], cols = [], fun1, f
                           overflow: 'hidden'
                         }}>
                           <div style={{ padding: '4px 0' }}>
-                     
-                            <button
-                              onClick={() => {
-                                fun2(item);
-                                closeDropdown();
-                              }}
-                              style={{
-                                width: '100%',
-                                padding: '8px 16px',
-                                textAlign: 'left',
-                                fontSize: '14px',
-                                color: '#111827',
-                                transition: 'background-color 0.15s ease-in-out',
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '12px',
-                                border: 'none',
-                                backgroundColor: 'transparent',
-                                cursor: 'pointer'
-                              }}
-                              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f9fafb'}
-                              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
-                            >
-                              <Edit style={{ width: '16px', height: '16px' }} />
-                              Edit
-                            </button>
-                            <button
-                              onClick={() => {
-                                fun3(item);
-                                closeDropdown();
-                              }}
-                              style={{
-                                width: '100%',
-                                padding: '8px 16px',
-                                textAlign: 'left',
-                                fontSize: '14px',
-                                color: '#111827',
-                                transition: 'background-color 0.15s ease-in-out',
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '12px',
-                                border: 'none',
-                                backgroundColor: 'transparent',
-                                cursor: 'pointer'
-                              }}
-                              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f9fafb'}
-                              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
-                            >
-                              <Heart style={{ width: '16px', height: '16px' }} />
-                              Fav
-                            </button>
-                            <button
-                              onClick={() => {
-                                // Handle delete action
-                                closeDropdown();
-                              }}
-                              style={{
-                                width: '100%',
-                                padding: '8px 16px',
-                                textAlign: 'left',
-                                fontSize: '14px',
-                                color: '#dc2626',
-                                transition: 'background-color 0.15s ease-in-out',
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '12px',
-                                border: 'none',
-                                backgroundColor: 'transparent',
-                                cursor: 'pointer'
-                              }}
-                              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f9fafb'}
-                              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
-                            >
-                              <Delete style={{ width: '16px', height: '16px' }} />
-                              Delete
-                            </button>
+                            {typeof funView === 'function' && (
+                              <button
+                                onClick={() => {
+                                  funView(item)
+                                  closeDropdown()
+                                }}
+                                style={{
+                                  width: '100%',
+                                  padding: '8px 16px',
+                                  textAlign: 'left',
+                                  fontSize: '14px',
+                                  color: '#111827',
+                                  transition: 'background-color 0.15s ease-in-out',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  gap: '12px',
+                                  border: 'none',
+                                  backgroundColor: 'transparent',
+                                  cursor: 'pointer'
+                                }}
+                                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#f9fafb')}
+                                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
+                              >
+                                <View style={{ width: '16px', height: '16px' }} />
+                                View
+                              </button>
+                            )}
+                            {typeof funEdit === 'function' && (
+                              <button
+                                onClick={() => {
+                                  funEdit(item)
+                                  closeDropdown()
+                                }}
+                                style={{
+                                  width: '100%',
+                                  padding: '8px 16px',
+                                  textAlign: 'left',
+                                  fontSize: '14px',
+                                  color: '#111827',
+                                  transition: 'background-color 0.15s ease-in-out',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  gap: '12px',
+                                  border: 'none',
+                                  backgroundColor: 'transparent',
+                                  cursor: 'pointer'
+                                }}
+                                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#f9fafb')}
+                                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
+                              >
+                                <Edit style={{ width: '16px', height: '16px' }} />
+                                Edit
+                              </button>
+                            )}
+                            {typeof funDelete === 'function' && (
+                              <button
+                                onClick={() => {
+                                  funDelete(item)
+                                  closeDropdown()
+                                }}
+                                style={{
+                                  width: '100%',
+                                  padding: '8px 16px',
+                                  textAlign: 'left',
+                                  fontSize: '14px',
+                                  color: '#dc2626',
+                                  transition: 'background-color 0.15s ease-in-out',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  gap: '12px',
+                                  border: 'none',
+                                  backgroundColor: 'transparent',
+                                  cursor: 'pointer'
+                                }}
+                                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#f9fafb')}
+                                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
+                              >
+                                <Delete style={{ width: '16px', height: '16px' }} />
+                                Delete
+                              </button>
+                            )}
                           </div>
                         </div>
                       </>
@@ -353,282 +245,201 @@ const TableShared: React.FC<TableSharedProps> = ({ rows = [], cols = [], fun1, f
         </div>
       </div>
 
-      {/* Mobile Card View */}
-      <div className="Mopilee" >
-   <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-  {rows.map((item, index) => (
-    <div key={index} style={{
-      backgroundColor: '#ffffff',
-      borderRadius: '8px',
-      boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
-      border: '1px solid #e5e7eb',
-      overflow: 'hidden'
-    }}>
-      <div style={{ padding: '16px' }}>
-        <div style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'flex-start',
-          marginBottom: '16px'
-        }}>
-          <h3 style={{
-            fontSize: '16px',
-            fontWeight: '600',
-            color: '#111827',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-            paddingRight: '16px'
-          }}>
-            {item.name || 'Unnamed Product'}
-          </h3>
-          <div style={{
-            position: 'relative',
-            flexShrink: 0
-          }}>
-            <button
-              onClick={() => toggleDropdown(index + 1000)}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: '32px',
-                height: '32px',
-                borderRadius: '8px',
-                border: '1px solid #e5e7eb',
-                backgroundColor: '#ffffff',
-                transition: 'background-color 0.15s ease-in-out',
-                cursor: 'pointer'
-              }}
-              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f9fafb'}
-              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#ffffff'}
-            >
-              <MoreHorizontal style={{ width: '16px', height: '16px', color: '#6b7280' }} />
-            </button>
-            {openDropdown === index + 1000 && (
-              <>
-                <div 
-                  style={{
-                    position: 'fixed',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    zIndex: 10
-                  }}
-                  onClick={closeDropdown}
-                />
+      {/* Mobile */}
+      <div className="Mopilee">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          {rows.map((item, index) => (
+            <div key={index} style={{
+              backgroundColor: '#ffffff',
+              borderRadius: '8px',
+              boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
+              border: '1px solid #e5e7eb',
+              overflow: 'hidden'
+            }}>
+              <div style={{ padding: '16px' }}>
                 <div style={{
-                  position: 'absolute',
-                  right: 0,
-                  top: '40px',
-                  width: '192px',
-                  backgroundColor: '#ffffff',
-                  borderRadius: '8px',
-                  boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-                  border: '1px solid #e5e7eb',
-                  zIndex: 20,
-                  overflow: 'hidden'
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'flex-start',
+                  marginBottom: '16px'
                 }}>
-                  <div style={{ padding: '4px 0' }}>
+                  <h3 style={{
+                    fontSize: '16px',
+                    fontWeight: '600',
+                    color: '#111827',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                    paddingRight: '16px'
+                  }}>
+                    {item.name || 'Unnamed'}
+                  </h3>
+                  <div style={{ position: 'relative', flexShrink: 0 }}>
                     <button
-                      onClick={() => {
-                        fun1(item);
-                        closeDropdown();
-                      }}
+                      onClick={() => toggleDropdown(index + 1000)}
                       style={{
-                        width: '100%',
-                        padding: '8px 16px',
-                        textAlign: 'left',
-                        fontSize: '14px',
-                        color: '#111827',
-                        transition: 'background-color 0.15s ease-in-out',
-                        display: 'flex',
+                        display: 'inline-flex',
                         alignItems: 'center',
-                        gap: '12px',
-                        border: 'none',
-                        backgroundColor: 'transparent',
+                        justifyContent: 'center',
+                        width: '32px',
+                        height: '32px',
+                        borderRadius: '8px',
+                        border: '1px solid #e5e7eb',
+                        backgroundColor: '#ffffff',
+                        transition: 'background-color 0.15s ease-in-out',
                         cursor: 'pointer'
                       }}
-                      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f9fafb'}
-                      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                      onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#f9fafb')}
+                      onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#ffffff')}
                     >
-                      <View style={{ width: '16px', height: '16px' }} />
-                      View
+                      <MoreHorizontal style={{ width: '16px', height: '16px', color: '#6b7280' }} />
                     </button>
-                    <button
-                      onClick={() => {
-                        fun2(item);
-                        closeDropdown();
-                      }}
-                      style={{
-                        width: '100%',
-                        padding: '8px 16px',
-                        textAlign: 'left',
-                        fontSize: '14px',
-                        color: '#111827',
-                        transition: 'background-color 0.15s ease-in-out',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '12px',
-                        border: 'none',
-                        backgroundColor: 'transparent',
-                        cursor: 'pointer'
-                      }}
-                      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f9fafb'}
-                      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
-                    >
-                      <Edit style={{ width: '16px', height: '16px' }} />
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => {
-                        // Handle delete action
-                        closeDropdown();
-                      }}
-                      style={{
-                        width: '100%',
-                        padding: '8px 16px',
-                        textAlign: 'left',
-                        fontSize: '14px',
-                        color: '#dc2626',
-                        transition: 'background-color 0.15s ease-in-out',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '12px',
-                        border: 'none',
-                        backgroundColor: 'transparent',
-                        cursor: 'pointer'
-                      }}
-                      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f9fafb'}
-                      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
-                    >
-                      <Delete style={{ width: '16px', height: '16px' }} />
-                      Delete
-                    </button>
+                    {openDropdown === index + 1000 && (
+                      <>
+                        <div 
+                          style={{
+                            position: 'fixed',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            zIndex: 10
+                          }}
+                          onClick={closeDropdown}
+                        />
+                        <div style={{
+                          position: 'absolute',
+                          right: 0,
+                          top: '40px',
+                          width: '192px',
+                          backgroundColor: '#ffffff',
+                          borderRadius: '8px',
+                          boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+                          border: '1px solid #e5e7eb',
+                          zIndex: 20,
+                          overflow: 'hidden'
+                        }}>
+                          <div style={{ padding: '4px 0' }}>
+                            {typeof funView === 'function' && (
+                              <button
+                                onClick={() => {
+                                  funView(item)
+                                  closeDropdown()
+                                }}
+                                style={{
+                                  width: '100%',
+                                  padding: '8px 16px',
+                                  textAlign: 'left',
+                                  fontSize: '14px',
+                                  color: '#111827',
+                                  transition: 'background-color 0.15s ease-in-out',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  gap: '12px',
+                                  border: 'none',
+                                  backgroundColor: 'transparent',
+                                  cursor: 'pointer'
+                                }}
+                                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#f9fafb')}
+                                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
+                              >
+                                <View style={{ width: '16px', height: '16px' }} />
+                                View
+                              </button>
+                            )}
+                            {typeof funEdit === 'function' && (
+                              <button
+                                onClick={() => {
+                                  funEdit(item)
+                                  closeDropdown()
+                                }}
+                                style={{
+                                  width: '100%',
+                                  padding: '8px 16px',
+                                  textAlign: 'left',
+                                  fontSize: '14px',
+                                  color: '#111827',
+                                  transition: 'background-color 0.15s ease-in-out',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  gap: '12px',
+                                  border: 'none',
+                                  backgroundColor: 'transparent',
+                                  cursor: 'pointer'
+                                }}
+                                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#f9fafb')}
+                                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
+                              >
+                                <Edit style={{ width: '16px', height: '16px' }} />
+                                Edit
+                              </button>
+                            )}
+                            {typeof funDelete === 'function' && (
+                              <button
+                                onClick={() => {
+                                  funDelete(item)
+                                  closeDropdown()
+                                }}
+                                style={{
+                                  width: '100%',
+                                  padding: '8px 16px',
+                                  textAlign: 'left',
+                                  fontSize: '14px',
+                                  color: '#dc2626',
+                                  transition: 'background-color 0.15s ease-in-out',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  gap: '12px',
+                                  border: 'none',
+                                  backgroundColor: 'transparent',
+                                  cursor: 'pointer'
+                                }}
+                                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#f9fafb')}
+                                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
+                              >
+                                <Delete style={{ width: '16px', height: '16px' }} />
+                                Delete
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      </>
+                    )}
                   </div>
                 </div>
-              </>
-            )}
-          </div>
-        </div>
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '12px'
-        }}>
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between'
-          }}>
-            <span style={{
-              fontSize: '14px',
-              fontWeight: '500',
-              color: '#6b7280'
-            }}>ْIMage:</span>
-            <div style={{ flexShrink: 0 }}>
-              {item.image ? (
-                <img 
-                  style={{
-                    height: '48px',
-                    width: '48px',
-                    borderRadius: '8px',
-                    objectFit: 'cover',
-                    border: '1px solid #e5e7eb'
-                  }}
-                  src={item.image} 
-                  alt={item.name || 'Product'} 
-                />
-              ) : (
-                <div style={{
-                  height: '48px',
-                  width: '48px',
-                  borderRadius: '8px',
-                  backgroundColor: '#f3f4f6',
-                  border: '1px solid #e5e7eb',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}>
-                  <span style={{
-                    fontSize: '12px',
-                    color: '#6b7280'
-                  }}>Not Found Image</span>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  {T_Head.map((column, colIndex) => (
+                    <div key={colIndex} style={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <span style={{ fontSize: '14px', fontWeight: '500', color: '#6b7280' }}>{column}:</span>
+                      <span style={{
+                        fontSize: '14px',
+                        color: '#111827',
+                        fontWeight: '500',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap',
+                        maxWidth: '200px'
+                      }}>
+                        {truncateColumns.includes(column) 
+                          ? String(item[column] || '').substring(0, 3) 
+                          : item[column] || '—'}
+                      </span>
+                    </div>
+                  ))}
                 </div>
-              )}
+              </div>
             </div>
-          </div>
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between'
-          }}>
-            <span style={{
-              fontSize: '14px',
-              fontWeight: '500',
-              color: '#6b7280'
-            }}>Price:</span>
-            <span style={{
-              fontSize: '14px',
-              color: '#111827',
-              fontWeight: '500'
-            }}>{item.price || '—'}</span>
-          </div>
-          <div style={{
-            display: 'flex',
-            alignItems: 'flex-start',
-            justifyContent: 'space-between'
-          }}>
-            <span style={{
-              fontSize: '14px',
-              fontWeight: '500',
-              color: '#6b7280',
-              flexShrink: 0,
-              marginRight: '16px'
-            }}>Info:</span>
-            <span style={{
-              fontSize: '14px',
-              color: '#4b5563',
-              textAlign: 'right',
-              maxWidth: '224px'
-            }}>{item.description || '—'}</span>
-          </div>
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between'
-          }}>
-            <span style={{
-              fontSize: '14px',
-              fontWeight: '500',
-              color: '#6b7280'
-            }}>Description:</span>
-            <span style={{
-              fontSize: '14px',
-              color: '#4b5563'
-            }}>{item.category?.[0]?.name || item.category?.name || '—'}</span>
-          </div>
+          ))}
         </div>
       </div>
-    </div>
-  ))}
-</div>
-      </div>
-      
+
       {rows.length === 0 && (
-        <div style={{
-          textAlign: 'center',
-          padding: '48px 0'
-        }}>
-          <div style={{
-            color: '#6b7280',
-            fontSize: '14px'
-          }}>No data available</div>
+        <div style={{ textAlign: 'center', padding: '48px 0' }}>
+          <div style={{ color: '#6b7280', fontSize: '14px' }}>No data available</div>
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default TableShared;
+export default TableShared
